@@ -39,17 +39,17 @@ As I mentioned before, I was able to run litex successfully with the vexriscv cp
 
 Data being read after using ```mem_write 0x40000000 0x12345678```:
 
-![image](https://user-images.githubusercontent.com/83432874/226153375-6c55cb67-bff6-460b-ab47-fdc112b4f77a.png)
+![image](https://user-images.githubusercontent.com/83432874/226442130-f8898b49-ba91-49b8-b9c8-533276f7faa7.png)
 
 And data being written when miss occurs in l2 cache after using ```mem_write 0x50000000 0x12345678```:
 
-![image](https://user-images.githubusercontent.com/83432874/226153657-0a1a2a87-b5b8-4ee2-a854-621efd92bbce.png)
+![image](https://user-images.githubusercontent.com/83432874/226442863-8dc6741d-f956-4051-b106-57e5f5551f2b.png)
 
 The wdata_payload_data signal is set with 0x12345678 in its least significant part. I noted here that the wdata_payload_we signal is set to all ones while the data value is first read from the l2 cache and written to the dram with the data being placed in the correct spot. 
 
 Here is the behavior of a read from address 0x0 (after using ```mem_read 0x40000000 0x12345678 128```):
 
-![image](https://user-images.githubusercontent.com/83432874/226159445-9b488a5d-742f-4732-a721-f84efc266c6d.png)
+![image](https://user-images.githubusercontent.com/83432874/226443811-ca5e41b9-9d28-4003-ba53-862cf7c3dd3c.png)
 
 Where the data where r_data_valid is high has 0x12345678 appearing only once in the least significant part of rdata_payload_data.
 
@@ -62,14 +62,16 @@ litex> mem_write 0x50000000 0x12345678
 
 litex> mem_read 0x40000000 128
 Memory dump:
-0x40000000  78 56 34 12 02 00 30 ff 21 00 18 60 03 00 2c d6  xV4...0.!..`..,.
-0x40000010  03 00 36 d8 01 00 1b c0 01 80 2d b6 02 c0 36 80  ..6.......-...6.
-0x40000020  02 60 9b 6d 03 b0 ed 4c 03 d8 56 db 01 6c ab d2  .`.m...L..V..l..
-0x40000030  01 b6 f5 b6 02 db 5a b6 02 6d ad 6d c3 b6 f6 44  ......Z..m.m...D
-0x40000040  ff 5b 5b db b1 ad ad ff 62 d6 f6 b6 6e 6b 5b 4d  .[[.....b...nk[M
-0x40000050  9b b5 ad 6d d8 da f6 db b7 6d 7b 5b b6 b6 bd b6  ...m.....m{[....
-0x40000060  6c db de 16 ae 6d 4f 2d 5b b6 a7 45 68 db f3 a2  l....mO-[..Eh...
-0x40000070  97 ed 79 51 da f6 bc a2 b4 7b 5e 14 b5 3d 0f 08  ..yQ.....{^..=..
+0x40000000  78 56 34 12 ff ff ff ff ff ff ff ff ff ff ff ff  xV4.............
+0x40000010  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0x40000020  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0x40000030  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0x40000040  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0x40000050  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0x40000060  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0x40000070  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+
+litex> 
 ```
 
 Currently I think the wdata_payload_we signal isn't being used correctly in LiteDRAM for this large of a data width and address width.
