@@ -51,7 +51,7 @@ Here is the behavior of a read from address 0x0 (after using ```mem_read 0x40000
 
 ![image](https://user-images.githubusercontent.com/83432874/226159445-9b488a5d-742f-4732-a721-f84efc266c6d.png)
 
-And the data is correctly being placed with 0x12345678 appearing only once in the least significant part of rdata_payload_data.
+Where the data where r_data_valid is high has 0x12345678 appearing only once in the least significant part of rdata_payload_data.
 
 This is the repeated output with the vexriscv cpu.
 
